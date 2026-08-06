@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environment
+backend/blacklight_venv/
+
+# Local environment variables
+backend/.env
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
