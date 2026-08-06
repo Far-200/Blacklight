@@ -2,27 +2,27 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# Virtual environment
+# Python virtual environments
 backend/blacklight_venv/
+.venv/
 
 # Local environment variables
-backend/.env
+**/.env
+**/.env.*
+!**/.env.example
 
-# Editors and OS
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
-
-# Frontend .gitignore
-node_modules
-dist
-dist-ssr
+# Frontend dependencies and builds
+node_modules/
+dist/
+dist-ssr/
+coverage/
 *.local
 
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -30,19 +30,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
+# Editors
+.vscode/
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
+# Operating system
+.DS_Store
+Thumbs.db
