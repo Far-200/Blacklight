@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+/*
+  Blacklight design tokens.
+
+  Everything visual in the app resolves from this block. Components use the
+  generated Tailwind utilities (bg-surface, text-muted, border-line, ...) or the
+  raw CSS custom properties — never hard-coded hex values.
+
+  Palette direction: a forensic console under ultraviolet light. The violet is
+  sampled directly from the Blacklight logo artwork (#8560E6 core, #C9B2F5
+  highlight) so the interface and the mark share one light source.
+*/
+@theme {
+  /* --- Surfaces, from deepest to most elevated --- */
+  --color-void: #07070c;
+  --color-ink: #0b0b12;
+  --color-surface: #101119;
+  --color-elevated: #161823;
+  --color-raised: #1d1f2b;
+
+  /* --- Borders --- */
+  --color-line: #22242f;
+  --color-line-strong: #2e3140;
+
+  /* --- Text --- */
+  --color-fg: #e7e8ef;
+  --color-muted: #8b90a3;
+  --color-faint: #626779;
+
+  /* --- Primary accent: ultraviolet --- */
+  --color-uv: #8560e6;
+  --color-uv-dim: #6c46c4;
+  --color-uv-deep: #442d7d;
+  --color-uv-glow: #c9b2f5;
+
+  /* --- Secondary accent: restrained electric cyan, informational only --- */
+  --color-cyan: #4fd1e0;
+  --color-cyan-dim: #2b8d99;
+
+  /* --- Severity. Reserved exclusively for severity. Never decorative. --- */
+  --color-critical: #f2555a;
+  --color-high: #ff8b42;
+  --color-medium: #e8b93a;
+  --color-low: #5aa0f0;
+  --color-info: #7e8496;
+
+  /* --- Operational states --- */
+  --color-ok: #46c98b;
+  --color-warn: #e8b93a;
+  --color-danger: #f2555a;
+
+  /* --- Type --- */
+  --font-sans:
+    "Archivo", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* --- Radii --- */
+  --radius-panel: 0.625rem;
+  --radius-control: 0.375rem;
+
+  /* --- Illumination. Soft and restrained; used sparingly. --- */
+  --shadow-uv: 0 0 0 1px color-mix(in oklab, var(--color-uv) 35%, transparent),
+    0 0 24px -6px color-mix(in oklab, var(--color-uv) 45%, transparent);
+  --shadow-panel: 0 1px 0 0 rgb(255 255 255 / 0.02),
+    0 8px 24px -12px rgb(0 0 0 / 0.8);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  * {
+    border-color: var(--color-line);
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /*
+    The wide, slightly stretched grotesque used for page titles and eyebrows.
+    Echoes the letterspaced BLACKLIGHT wordmark rather than reading as a
+    default dashboard heading.
+  */
+  h1,
+  h2,
+  h3 {
+    font-variation-settings: "wdth" 112;
+    letter-spacing: -0.005em;
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--font-mono);
+    font-feature-settings: "liga" 0;
+  }
+
+  /* Visible, consistent keyboard focus everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-uv);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-uv) 40%, transparent);
+    color: var(--color-fg);
+  }
+
+  /* Scrollbars tuned to the ink surfaces rather than the OS default. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line-strong) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 9999px;
+  }
+}
+
+@layer components {
+  /*
+    Signature element: the blacklight sweep.
+
+    A single diagonal ultraviolet beam — the same angle as the mark — that
+    traverses a surface only while something is genuinely running. Nothing
+    static ever gets it, so movement in this interface always means work in
+    progress.
+  */
+  .bl-sweep {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .bl-sweep::after {
+    content: "";
+    position: absolute;
+    inset: -60% -20%;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      transparent 42%,
+      color-mix(in oklab, var(--color-uv-glow) 14%, transparent) 50%,
+      transparent 58%
+    );
+    transform: translateX(-60%);
+    animation: bl-sweep-move 3.6s linear infinite;
+  }
+
+  @keyframes bl-sweep-move {
+    to {
+      transform: translateX(60%);
+    }
+  }
+
+  /* A hairline rail of ultraviolet along a panel's leading edge. */
+  .bl-rail {
+    box-shadow: inset 2px 0 0 0 var(--color-uv);
+  }
+
+  /* Fine grid, like a calibration surface. Used once, behind the app shell. */
+  .bl-grid {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in oklab, var(--color-line) 55%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--color-line) 55%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 64px 64px;
+  }
+
+  .bl-pulse {
+    animation: bl-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes bl-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  .bl-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--color-elevated) 0%,
+      var(--color-raised) 50%,
+      var(--color-elevated) 100%
+    );
+    background-size: 200% 100%;
+    animation: bl-shimmer 1.6s ease-in-out infinite;
+  }
+
+  @keyframes bl-shimmer {
+    to {
+      background-position: -200% 0;
+    }
+  }
+}
+
+/*
+  Ordinary navigation never animates. Only progress indicators and the sweep do,
+  and they all stop here.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .bl-sweep::after {
+    display: none;
+  }
+}
